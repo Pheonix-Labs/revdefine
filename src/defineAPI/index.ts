@@ -2,6 +2,7 @@ import { BlockInfo, BlockHeader, ExploratoryDeployResponse, IsFinalizedResponse 
 import { TransactionsResponse, RankRevAccount, RevAccountListResponse, RangeDataResponse, AccountTopStatDataResponse } from './defineTypes'
 import axios, { AxiosInstance } from 'axios';
 import domainHost from './host'
+import { exec } from 'apexcharts';
 
 
 export const defaultRowsPerPage = 20
@@ -98,9 +99,17 @@ class DefineClient {
     return resp.data
   }
 
-  public async revAccount (address: string): Promise<RankRevAccount> {
-    const resp = await this.defineAxiosInstance.get<RankRevAccount>('/revaccount/' + address)
-    return resp.data
+  public async revAccount (address: string): Promise<RankRevAccount | null> {
+    try{
+      const resp = await this.defineAxiosInstance.get<RankRevAccount>('/revaccount/' + address)
+      return resp.data
+    } catch (e){
+      if (e.response.status==404){
+        return null
+      } else{
+        throw e
+      }
+    };
   }
 
   public async revAccounts (page: number = defaultPage, rowsPerPage: number = defaultRowsPerPage): Promise<RevAccountListResponse> {
