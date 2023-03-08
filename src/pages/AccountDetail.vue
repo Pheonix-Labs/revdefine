@@ -57,7 +57,7 @@ export default Vue.extend({
   },
   methods: {
     async getTransactions(page: number, isSucceeded: boolean, isUserDeploy: boolean) {
-      try { 
+      try {
         this.loading = true;
         let resp: TransactionsResponse;
         if (isUserDeploy && isSucceeded){
@@ -82,9 +82,16 @@ export default Vue.extend({
     async getOverviewData() {
       this.loading = true;
       const account = await client.revAccount(this.$route.params.addr);
-      this.balance = account.balance;
-      this.tags = account.tags;
-      this.loading = false;
+      if (account){
+        this.balance = account.balance;
+        this.tags = account.tags;
+        this.loading = false;
+      } else {
+        this.balance = 0;
+        this.tags = [];
+        this.loading = false;
+      }
+
     },
   },
   async created() {
