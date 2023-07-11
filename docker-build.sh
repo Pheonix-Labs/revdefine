@@ -8,5 +8,5 @@ sudo apt-get install -y nodejs
 npm install -g yarn
 cd /revdefine
 yarn
-yarn global add @quasar/cli
+yarn global add @quasar/cli@1.4.0
 quasar build
